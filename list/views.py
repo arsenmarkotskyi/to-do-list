@@ -8,7 +8,7 @@ from list.models import Tag, Task
 
 def index(request: HttpRequest) -> HttpResponse:
     tasks = Task.objects.all()
-    return render(request, "list/index.html", {'tasks': tasks})
+    return render(request, "list/index.html", {"tasks": tasks})
 
 
 class TagListView(generic.ListView):
