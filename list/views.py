@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views import generic
+from django.views import generic, View
 from django.urls import reverse_lazy
 
 from list.models import Tag, Task
@@ -55,18 +55,19 @@ class TaskListDelete(generic.DeleteView):
     model = Task
     success_url = reverse_lazy("list:index")
 
+class TaskStatusUpdateView(View):
+    is_done: bool
 
-def complete_task(request: HttpRequest, pk: int) -> HttpResponse:
-    if request.method == "POST":
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         task = get_object_or_404(Task, pk=pk)
-        task.is_done = True
+        task.is_done = self.is_done
         task.save()
-    return redirect("list:index")
+        return redirect("list:index")
 
 
-def undo_task(request: HttpRequest, pk: int) -> HttpResponse:
-    if request.method == "POST":
-        task = get_object_or_404(Task, pk=pk)
-        task.is_done = False
-        task.save()
-    return redirect("list:index")
+class CompleteTaskView(TaskStatusUpdateView):
+    is_done = True
+
+
+class UndoTaskView(TaskStatusUpdateView):
+    is_done = False

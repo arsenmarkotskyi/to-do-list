@@ -8,8 +8,8 @@ from list.views import (
     TaskListUpdate,
     TaskListDelete,
     TaskListDetail,
-    complete_task,
-    undo_task
+    UndoTaskView,
+    CompleteTaskView
 )
 from django.urls import path
 
@@ -55,12 +55,12 @@ urlpatterns = [
     ),
     path(
         "task/<int:pk>/complete/",
-        complete_task,
+        CompleteTaskView.as_view(),
         name="task-complete"
     ),
     path(
         "task/<int:pk>/undo/",
-        undo_task,
+        UndoTaskView.as_view(),
         name="task-undo"
     ),
 ]
